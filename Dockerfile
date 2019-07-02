@@ -1,24 +1,14 @@
-
-FROM node:12.2.0-alpine
-  
-RUN mkdir /app
-COPY . /app
-MAINTAINER arsia
-
-WORKDIR /app
-
-#We expose all Node.js binaries to our PATH environment variable and copy our projects package.json to the app directory
-ENV PATH /app/node_modules/.bin:$PATH
-
+#Stage 1 - build env.
+FROM node:12.2.0-alpine as react-build
+WORKDIR /usr/app
 # Copying the JSON file rather than the whole working directory allows us to take advantage of Docker’s cache layers.
-COPY package.json /app/package.json
-    
-    
-RUN npm install
-    
-    
-RUN npm install react-scripts@3.0.1 -g
-    
+COPY package.json package-lock.json ./
+RUN npm install 
+COPY . ./
+RUN npm run build
 
-CMD ["npm", "start"]
-"Dockerfile" 22L, 466C
+#Stage 2 - prod env.
+FROM nginx:alpine
+COPY --from=react-build usr/app/build usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
