@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/arsiaardalancanopy/docker-react-app/tree/develop.svg?style=svg)](https://circleci.com/gh/arsiaardalancanopy/docker-react-app/tree/develop)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
